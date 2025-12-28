@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './CommandPanel.css'
-import { DonationPanel } from './DonationPanel'
 
 function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
   const [currentStep, setCurrentStep] = useState(2) // Start at "Assigned" step (0-indexed: 0=Reported, 1=Verified, 2=Assigned, 3=In Progress, 4=Resolved)
@@ -239,59 +238,58 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
         </div>
 
         {/* Trust Score Card */}
-        <div className="command-card">
-          <div className="card-header">
-            <h2 className="card-title">Trust Score</h2>
-            <div className="card-divider"></div>
-          </div>
-          <div className="card-content">
-            <div className="trust-score-main">
-              <div className="trust-score-value">{trustScore.overall}</div>
-              <div className="trust-score-label">Overall Score</div>
-              <div className={`trust-score-trend trend-${trustScore.trend}`}>
-                {trustScore.trend === 'up' ? '↑' : '↓'} 2.3%
-              </div>
+          <div className="command-card">
+            <div className="card-header">
+              <h2 className="card-title">Trust Score</h2>
+              <div className="card-divider"></div>
             </div>
-            <div className="trust-metrics">
-              <div className="trust-metric">
-                <div className="trust-metric-label">Reliability</div>
-                <div className="trust-metric-bar">
-                  <div 
-                    className="trust-metric-fill" 
-                    style={{ width: `${trustScore.reliability}%` }}
-                  ></div>
+            <div className="card-content">
+              <div className="trust-score-main">
+                <div className="trust-score-value">{trustScore.overall}</div>
+                <div className="trust-score-label">Overall Score</div>
+                <div className={`trust-score-trend trend-${trustScore.trend}`}>
+                  {trustScore.trend === 'up' ? '↑' : '↓'} 2.3%
                 </div>
-                <div className="trust-metric-value">{trustScore.reliability}%</div>
               </div>
-              <div className="trust-metric">
-                <div className="trust-metric-label">Response</div>
-                <div className="trust-metric-bar">
-                  <div 
-                    className="trust-metric-fill" 
-                    style={{ width: `${trustScore.response}%` }}
-                  ></div>
+              <div className="trust-metrics">
+                <div className="trust-metric">
+                  <div className="trust-metric-label">Reliability</div>
+                  <div className="trust-metric-bar">
+                    <div 
+                      className="trust-metric-fill" 
+                      style={{ width: `${trustScore.reliability}%` }}
+                    ></div>
+                  </div>
+                  <div className="trust-metric-value">{trustScore.reliability}%</div>
                 </div>
-                <div className="trust-metric-value">{trustScore.response}%</div>
-              </div>
-              <div className="trust-metric">
-                <div className="trust-metric-label">Coordination</div>
-                <div className="trust-metric-bar">
-                  <div 
-                    className="trust-metric-fill" 
-                    style={{ width: `${trustScore.coordination}%` }}
-                  ></div>
+                <div className="trust-metric">
+                  <div className="trust-metric-label">Response</div>
+                  <div className="trust-metric-bar">
+                    <div 
+                      className="trust-metric-fill" 
+                      style={{ width: `${trustScore.response}%` }}
+                    ></div>
+                  </div>
+                  <div className="trust-metric-value">{trustScore.response}%</div>
                 </div>
-                <div className="trust-metric-value">{trustScore.coordination}%</div>
+                <div className="trust-metric">
+                  <div className="trust-metric-label">Coordination</div>
+                  <div className="trust-metric-bar">
+                    <div 
+                      className="trust-metric-fill" 
+                      style={{ width: `${trustScore.coordination}%` }}
+                    ></div>
+                  </div>
+                  <div className="trust-metric-value">{trustScore.coordination}%</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <DonationPanel />
       </div>
-    </div>
-  )
-}
+    )
+  }
+
 
 export default CommandPanel
 
