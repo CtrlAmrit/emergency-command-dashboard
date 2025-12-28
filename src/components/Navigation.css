@@ -5,10 +5,11 @@
   right: 0;
   z-index: 1000;
   display: flex;
-  gap: 24px;
-  padding: 12px 24px;
-  background-color: #0a0a0a;
-  border-bottom: 1px solid #1a1a1a;
+  gap: 32px;
+  padding: 16px 32px;
+  background-color: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .nav-link {

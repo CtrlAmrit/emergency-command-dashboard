@@ -10,9 +10,128 @@
 
 .volunteer-header {
   padding: 24px 32px;
-  border-bottom: 1px solid #1a1a1a;
-  background-color: #0f0f0f;
+  background-color: rgba(15, 15, 15, 0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
+  z-index: 10;
+}
+
+.volunteer-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.volunteer-map-section {
+  overflow: hidden;
+  position: relative;
+}
+
+.task-card {
+  background-color: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.task-card:hover {
+  background-color: rgba(40, 40, 40, 0.5);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+}
+
+.task-card-assigned {
+  border-left: 4px solid #00ff00;
+  background: linear-gradient(90deg, rgba(0, 255, 0, 0.05) 0%, rgba(30, 30, 30, 0.4) 100%);
+  animation: acceptPulse 0.5s ease-out;
+}
+
+.task-card-available {
+  border-left: 4px solid #ffaa00;
+}
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: none;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.task-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+.task-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: none;
+  position: relative;
+}
+
+.task-actions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+.task-btn {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.task-btn-accept {
+  border-color: rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+}
+
+.task-btn-accept:hover {
+  background-color: rgba(0, 255, 0, 0.1);
+  border-color: rgba(0, 255, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.task-btn-decline {
+  border-color: rgba(255, 51, 51, 0.2);
+  color: #ff3333;
+}
+
+.task-btn-decline:hover {
+  background-color: rgba(255, 51, 51, 0.1);
+  border-color: rgba(255, 51, 51, 0.4);
+  transform: translateY(-1px);
 }
 
 .volunteer-header h1 {
