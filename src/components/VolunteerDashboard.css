@@ -304,9 +304,75 @@
   color: #000;
 }
 
-.status-badge.status-assigned {
-  background-color: #00ff00;
+.status-badge.status-completed {
+  background-color: #4facfe;
   color: #000;
+}
+
+.status-badge.status-in-progress {
+  background-color: #00d2ff;
+  color: #000;
+}
+
+.task-progress-container {
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.task-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.task-progress-track {
+  height: 6px;
+  background-color: #1a1a1a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.task-progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.bar-available {
+  background-color: #333;
+}
+
+.bar-assigned {
+  background-color: #ffaa00;
+  box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+}
+
+.bar-in-progress {
+  background-color: #00d2ff;
+  background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+}
+
+.bar-completed {
+  background-color: #4facfe;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+}
+
+.task-card-completed {
+  border-left: 3px solid #4facfe;
+  opacity: 0.9;
+}
+
+.task-card-in-progress {
+  border-left: 3px solid #00d2ff;
+  background: linear-gradient(90deg, rgba(0, 210, 255, 0.05) 0%, rgba(20, 20, 20, 0) 100%);
 }
 
 .task-actions {
