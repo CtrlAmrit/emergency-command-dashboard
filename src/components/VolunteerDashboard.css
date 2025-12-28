@@ -346,13 +346,23 @@
   margin-bottom: 16px;
 }
 
-.task-distance {
+.task-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-potential-gain {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #888;
-  font-weight: 500;
+  color: #ffaa00;
+  font-weight: 600;
+}
+
+.gain-icon {
+  font-size: 12px;
 }
 
 .distance-icon {

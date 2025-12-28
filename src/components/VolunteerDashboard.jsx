@@ -20,7 +20,8 @@ function VolunteerDashboard() {
         location: '123 Main St',
         lat: 40.7128,
         lng: -74.0060,
-        description: 'Cardiac arrest reported. Immediate medical assistance needed.'
+        description: 'Cardiac arrest reported. Immediate medical assistance needed.',
+        potentialTrustGain: 25
       },
       {
         id: 2,
@@ -31,7 +32,8 @@ function VolunteerDashboard() {
         location: '456 Oak Ave',
         lat: 40.7580,
         lng: -73.9855,
-        description: 'Emergency supplies delivery required for evacuation center.'
+        description: 'Emergency supplies delivery required for evacuation center.',
+        potentialTrustGain: 15
       },
       {
         id: 3,
@@ -42,7 +44,8 @@ function VolunteerDashboard() {
         location: '789 Pine Rd',
         lat: 40.7505,
         lng: -73.9934,
-        description: 'Traffic accident. Assistance with traffic control needed.'
+        description: 'Traffic accident. Assistance with traffic control needed.',
+        potentialTrustGain: 10
       },
       {
         id: 4,
@@ -53,7 +56,8 @@ function VolunteerDashboard() {
         location: '321 Elm St',
         lat: 40.7282,
         lng: -73.9942,
-        description: 'Medical emergency. First aid support required.'
+        description: 'Medical emergency. First aid support required.',
+        potentialTrustGain: 20
       }
     ])
 
@@ -88,10 +92,15 @@ function VolunteerDashboard() {
 
         // Simulate verification and trust score increase
         setTimeout(() => {
-          setTasks(prev => prev.map(task => 
-            task.id === taskId ? { ...task, status: 'completed' } : task
-          ))
-          setTrustScore(prev => prev + 15)
+          let gainedScore = 15;
+          setTasks(prev => {
+            const task = prev.find(t => t.id === taskId);
+            if (task) gainedScore = task.potentialTrustGain;
+            return prev.map(task => 
+              task.id === taskId ? { ...task, status: 'completed' } : task
+            )
+          })
+          setTrustScore(prev => prev + gainedScore)
           setTrustUpdated(true)
           setTimeout(() => setTrustUpdated(false), 2000)
         }, 4000)
@@ -198,17 +207,23 @@ function VolunteerDashboard() {
                       <div className="task-description">{task.description}</div>
                     </div>
                     
-                      <div className="task-footer">
-                        <div className="task-distance">
-                          <span className="distance-icon">📍</span>
-                          {task.distance}
+                        <div className="task-footer">
+                          <div className="task-info-group">
+                            <div className="task-distance">
+                              <span className="distance-icon">📍</span>
+                              {task.distance}
+                            </div>
+                            <div className="task-potential-gain">
+                              <span className="gain-icon">★</span>
+                              +{task.potentialTrustGain} Trust
+                            </div>
+                          </div>
+                          <div className="task-status">
+                            <span className={`status-badge status-${task.status}`}>
+                              {getStatusLabel(task.status)}
+                            </span>
+                          </div>
                         </div>
-                        <div className="task-status">
-                          <span className={`status-badge status-${task.status}`}>
-                            {getStatusLabel(task.status)}
-                          </span>
-                        </div>
-                      </div>
 
                       <div className="task-progress-container">
                         <div className="task-progress-label">
