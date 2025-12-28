@@ -6,21 +6,21 @@
   z-index: 1000;
   display: flex;
   justify-content: center;
-  padding: 12px 0;
-  background-color: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  align-items: center;
+  height: 72px;
+  background-color: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .role-switcher {
   position: relative;
   display: flex;
-  background: rgba(30, 30, 30, 0.6);
+  background: rgba(20, 20, 20, 0.5);
   padding: 4px;
-  border-radius: 12px;
+  border-radius: 14px;
   gap: 4px;
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .selector-slider {
@@ -29,24 +29,24 @@
   bottom: 4px;
   left: 4px;
   width: calc(50% - 6px);
-  border-radius: 8px;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  border-radius: 10px;
+  transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
   pointer-events: none;
   z-index: 1;
 }
 
 .selector-slider.admin {
   transform: translateX(0);
-  background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 69, 0, 0.1));
-  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.15);
-  border: 1px solid rgba(255, 140, 0, 0.2);
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.15), rgba(255, 69, 0, 0.05));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 140, 0, 0.25);
 }
 
 .selector-slider.volunteer {
   transform: translateX(calc(100% + 4px));
-  background: linear-gradient(135deg, rgba(0, 200, 255, 0.2), rgba(0, 100, 255, 0.1));
-  box-shadow: 0 2px 8px rgba(0, 200, 255, 0.15);
-  border: 1px solid rgba(0, 200, 255, 0.2);
+  background: linear-gradient(135deg, rgba(0, 200, 255, 0.15), rgba(0, 100, 255, 0.05));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 200, 255, 0.25);
 }
 
 .role-option {
@@ -54,76 +54,40 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 24px;
-  font-size: 13px;
+  gap: 10px;
+  padding: 10px 28px;
+  font-size: 14px;
   font-weight: 500;
-  color: #777;
+  color: #888;
   text-decoration: none;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   transition: all 0.3s ease;
-  border-radius: 8px;
-  min-width: 180px;
+  border-radius: 10px;
+  min-width: 190px;
   justify-content: center;
-  line-height: 1;
+  line-height: 1.4;
 }
 
 .role-option:hover {
-  color: #bbb;
+  color: #fff;
 }
 
 .role-option.active {
   color: #fff;
 }
 
-.role-option::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: currentColor;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-  border-radius: 2px;
-  opacity: 0;
-}
-
-.role-option.active::after {
-  width: 24px;
-  opacity: 1;
-  margin-bottom: 2px;
-}
-
 .role-icon {
   font-size: 16px;
-  opacity: 0.7;
+  margin-bottom: 1px; /* Optical adjustment for vertical centering */
 }
 
-.role-option.active .role-icon {
-  opacity: 1;
-}
-
-/* Color specific overrides for active state text glow and indicators */
+/* Color specific overrides */
 .role-option.active:nth-child(2) { /* Admin */
-  text-shadow: 0 0 12px rgba(255, 140, 0, 0.4);
-  color: #ffaa44;
-}
-
-.role-option.active:nth-child(2)::after {
-  background: #ff8c00;
-  box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
+  color: #ff9d44;
 }
 
 .role-option.active:nth-child(3) { /* Volunteer */
-  text-shadow: 0 0 12px rgba(0, 200, 255, 0.4);
-  color: #44ccff;
-}
-
-.role-option.active:nth-child(3)::after {
-  background: #00c8ff;
-  box-shadow: 0 0 8px rgba(0, 200, 255, 0.6);
+  color: #44d5ff;
 }
 
 
