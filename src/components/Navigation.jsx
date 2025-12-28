@@ -3,21 +3,27 @@ import './Navigation.css'
 
 function Navigation() {
   const location = useLocation()
+  const isAdmin = location.pathname === '/admin' || location.pathname === '/'
 
   return (
     <nav className="top-navigation">
-      <Link 
-        to="/admin" 
-        className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}
-      >
-        Admin View
-      </Link>
-      <Link 
-        to="/volunteer" 
-        className={`nav-link ${location.pathname === '/volunteer' ? 'active' : ''}`}
-      >
-        Volunteer View
-      </Link>
+      <div className="role-switcher">
+        <div className={`selector-slider ${isAdmin ? 'admin' : 'volunteer'}`} />
+        <Link 
+          to="/admin" 
+          className={`role-option ${isAdmin ? 'active' : ''}`}
+        >
+          <span className="role-icon">◈</span>
+          Command Center (Admin)
+        </Link>
+        <Link 
+          to="/volunteer" 
+          className={`role-option ${!isAdmin ? 'active' : ''}`}
+        >
+          <span className="role-icon">✦</span>
+          Volunteer Mode
+        </Link>
+      </div>
     </nav>
   )
 }
