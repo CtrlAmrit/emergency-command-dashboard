@@ -54,20 +54,42 @@
   border: 1px solid #1f1f1f;
   border-radius: 4px;
   padding: 20px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .task-card:hover {
-  border-color: #2a2a2a;
-  background-color: #161616;
+  border-color: #333;
+  background-color: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .task-card-assigned {
   border-left: 3px solid #00ff00;
+  background: linear-gradient(90deg, rgba(0, 255, 0, 0.05) 0%, rgba(20, 20, 20, 0) 100%);
+  animation: acceptPulse 0.5s ease-out;
 }
 
 .task-card-available {
   border-left: 3px solid #ffaa00;
+}
+
+.task-card-declining {
+  animation: declineFade 0.5s forwards;
+  pointer-events: none;
+}
+
+@keyframes acceptPulse {
+  0% { transform: scale(1); background-color: rgba(0, 255, 0, 0.1); }
+  50% { transform: scale(1.02); background-color: rgba(0, 255, 0, 0.2); }
+  100% { transform: scale(1); background-color: transparent; }
+}
+
+@keyframes declineFade {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-20px); opacity: 0; }
 }
 
 .task-card-header {
