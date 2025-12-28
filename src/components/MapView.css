@@ -1,0 +1,422 @@
+.map-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #0a0a0a;
+  position: relative;
+}
+
+/* Ensure Mapbox map fills container */
+.map-container > div {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #0a0a0a;
+}
+
+.marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.marker:hover {
+  transform: scale(1.4);
+  z-index: 1000;
+}
+
+/* Hover effects */
+.marker-hovered {
+  z-index: 2000 !important;
+  position: relative;
+}
+
+.marker-hovered::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: focusRing 2s ease-in-out infinite;
+}
+
+.marker-dimmed {
+  opacity: 0.3 !important;
+  filter: grayscale(0.5);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.volunteer-highlighted {
+  z-index: 1500 !important;
+  transform: scale(1.3);
+  filter: brightness(1.5) drop-shadow(0 0 8px rgba(51, 136, 255, 0.8));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.volunteer-highlighted .volunteer-marker-inner {
+  box-shadow: 0 0 12px rgba(51, 136, 255, 0.9);
+}
+
+@keyframes focusRing {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Critical severity - red with pulse */
+.marker-severity-critical {
+  background-color: #ff3333;
+  border-color: #ffffff;
+  --pulse-intensity: 1;
+  --pulse-speed: 2s;
+  --pulse-scale: 1.1;
+  --shadow-size: 4px;
+  animation: criticalPulse var(--pulse-speed, 2s) ease-in-out infinite;
+}
+
+.marker-severity-critical::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ff3333;
+  transform: translate(-50%, -50%);
+  animation: criticalRipple var(--pulse-speed, 2s) ease-out infinite;
+  pointer-events: none;
+}
+
+/* High severity - orange with pulse */
+.marker-severity-high {
+  background-color: #ff8833;
+  border-color: #ffffff;
+  --pulse-intensity: 1;
+  --pulse-speed: 2s;
+  --pulse-scale: 1.1;
+  --shadow-size: 4px;
+  animation: highPulse var(--pulse-speed, 2s) ease-in-out infinite;
+}
+
+.marker-severity-high::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ff8833;
+  transform: translate(-50%, -50%);
+  animation: highRipple var(--pulse-speed, 2s) ease-out infinite;
+  pointer-events: none;
+}
+
+/* Medium severity - yellow with pulse */
+.marker-severity-medium {
+  background-color: #ffcc33;
+  border-color: #ffffff;
+  --pulse-intensity: 1;
+  --pulse-speed: 2s;
+  --pulse-scale: 1.1;
+  --shadow-size: 4px;
+  animation: mediumPulse var(--pulse-speed, 2s) ease-in-out infinite;
+}
+
+.marker-severity-medium::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffcc33;
+  transform: translate(-50%, -50%);
+  animation: mediumRipple var(--pulse-speed, 2s) ease-out infinite;
+  pointer-events: none;
+}
+
+/* Resolved incidents - fade out */
+.marker-resolved {
+  animation: fadeOut 2s ease-out forwards !important;
+  pointer-events: none;
+}
+
+.marker-resolved::after {
+  animation: none !important;
+}
+
+@keyframes criticalPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 51, 51, calc(0.7 * var(--pulse-intensity, 1)));
+  }
+  50% {
+    opacity: calc(1 - (0.05 * var(--pulse-intensity, 1)));
+    transform: scale(var(--pulse-scale, 1.1));
+    box-shadow: 0 0 0 var(--shadow-size, 4px) rgba(255, 51, 51, 0);
+  }
+}
+
+@keyframes highPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 136, 51, calc(0.6 * var(--pulse-intensity, 1)));
+  }
+  50% {
+    opacity: calc(1 - (0.05 * var(--pulse-intensity, 1)));
+    transform: scale(var(--pulse-scale, 1.1));
+    box-shadow: 0 0 0 var(--shadow-size, 4px) rgba(255, 136, 51, 0);
+  }
+}
+
+@keyframes mediumPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 204, 51, calc(0.5 * var(--pulse-intensity, 1)));
+  }
+  50% {
+    opacity: calc(1 - (0.05 * var(--pulse-intensity, 1)));
+    transform: scale(var(--pulse-scale, 1.1));
+    box-shadow: 0 0 0 var(--shadow-size, 4px) rgba(255, 204, 51, 0);
+  }
+}
+
+@keyframes criticalRipple {
+  0% {
+    width: 12px;
+    height: 12px;
+    opacity: calc(0.8 * var(--pulse-intensity, 1));
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: calc(32px * var(--pulse-intensity, 1));
+    height: calc(32px * var(--pulse-intensity, 1));
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes highRipple {
+  0% {
+    width: 12px;
+    height: 12px;
+    opacity: calc(0.7 * var(--pulse-intensity, 1));
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: calc(28px * var(--pulse-intensity, 1));
+    height: calc(28px * var(--pulse-intensity, 1));
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes mediumRipple {
+  0% {
+    width: 12px;
+    height: 12px;
+    opacity: calc(0.6 * var(--pulse-intensity, 1));
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: calc(24px * var(--pulse-intensity, 1));
+    height: calc(24px * var(--pulse-intensity, 1));
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* Popup styling */
+.incident-popup .mapboxgl-popup-content {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  padding: 0;
+  min-width: 280px;
+}
+
+.popup-content {
+  padding: 12px;
+  color: #e0e0e0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.popup-header strong {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.popup-severity {
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #000;
+  letter-spacing: 0.5px;
+}
+
+.popup-severity.severity-critical {
+  background-color: #ff3333;
+}
+
+.popup-severity.severity-high {
+  background-color: #ff8833;
+}
+
+.popup-severity.severity-medium {
+  background-color: #ffcc33;
+}
+
+.popup-location {
+  color: #aaa;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.popup-summary {
+  color: #ccc;
+  font-size: 11px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.popup-units {
+  color: #888;
+  font-size: 10px;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: #1a1a1a;
+}
+
+.mapboxgl-popup-close-button {
+  display: none;
+}
+
+.popup-status {
+  color: #888;
+  font-size: 10px;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+/* Volunteer Marker Styles */
+.volunteer-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+
+.volunteer-marker-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #3388ff;
+}
+
+.volunteer-marker-pending .volunteer-marker-inner {
+  background-color: #ffaa00;
+  animation: volunteerPulse 2s ease-in-out infinite;
+}
+
+.volunteer-marker-en-route .volunteer-marker-inner {
+  background-color: #3388ff;
+  animation: volunteerPulse 1.5s ease-in-out infinite;
+}
+
+.volunteer-marker-on-scene .volunteer-marker-inner {
+  background-color: #00ff00;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+}
+
+.volunteer-marker-standby .volunteer-marker-inner {
+  background-color: #888888;
+  opacity: 0.6;
+}
+
+@keyframes volunteerPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Volunteer Location Marker */
+.volunteer-location-marker {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background-color: #3388ff;
+  box-shadow: 0 0 12px rgba(51, 136, 255, 0.6);
+  cursor: pointer;
+  position: relative;
+}
+
+.volunteer-location-marker::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  transform: translate(-50%, -50%);
+}
+
