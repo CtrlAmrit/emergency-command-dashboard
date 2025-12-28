@@ -58,6 +58,8 @@ function VolunteerDashboard() {
     ])
 
     const [decliningTasks, setDecliningTasks] = useState([])
+    const [trustScore, setTrustScore] = useState(850)
+    const [trustUpdated, setTrustUpdated] = useState(false)
 
     const handleTaskAction = (taskId, action) => {
       if (action === 'accept') {
@@ -79,6 +81,20 @@ function VolunteerDashboard() {
           setTasks(prev => prev.filter(task => task.id !== taskId))
           setDecliningTasks(prev => prev.filter(id => id !== taskId))
         }, 500)
+      } else if (action === 'complete') {
+        setTasks(prev => prev.map(task => 
+          task.id === taskId ? { ...task, status: 'pending-verification' } : task
+        ))
+
+        // Simulate verification and trust score increase
+        setTimeout(() => {
+          setTasks(prev => prev.map(task => 
+            task.id === taskId ? { ...task, status: 'completed' } : task
+          ))
+          setTrustScore(prev => prev + 15)
+          setTrustUpdated(true)
+          setTimeout(() => setTrustUpdated(false), 2000)
+        }, 4000)
       }
     }
 
@@ -106,6 +122,7 @@ function VolunteerDashboard() {
         case 'available': return 0
         case 'assigned': return 30
         case 'in-progress': return 65
+        case 'pending-verification': return 90
         case 'completed': return 100
         default: return 0
       }
@@ -116,6 +133,7 @@ function VolunteerDashboard() {
         case 'available': return 'Available'
         case 'assigned': return 'En Route'
         case 'in-progress': return 'In Progress'
+        case 'pending-verification': return 'Verifying...'
         case 'completed': return 'Completed'
         default: return status
       }
@@ -128,7 +146,16 @@ function VolunteerDashboard() {
   return (
     <div className="volunteer-dashboard" style={{ marginTop: '45px', height: 'calc(100vh - 45px)' }}>
       <div className="volunteer-header">
-        <h1>Volunteer Task Center</h1>
+        <div className="header-left">
+          <h1>Volunteer Task Center</h1>
+        </div>
+        <div className={`trust-score-container ${trustUpdated ? 'score-updated' : ''}`}>
+          <div className="trust-label">Trust Score</div>
+          <div className="trust-value">
+            <span className="trust-icon-star">★</span>
+            {trustScore}
+          </div>
+        </div>
       </div>
       
       <div className="volunteer-main">
@@ -196,23 +223,33 @@ function VolunteerDashboard() {
                         </div>
                       </div>
                       
-                      {task.status === 'available' && !decliningTasks.includes(task.id) && (
+                        {task.status === 'available' && !decliningTasks.includes(task.id) && (
+                        <div className="task-actions">
+                          <button
+                            className="task-btn task-btn-accept"
+                            onClick={() => handleTaskAction(task.id, 'accept')}
+                          >
+                            Accept
+                          </button>
+                          <button
+                            className="task-btn task-btn-decline"
+                            onClick={() => handleTaskAction(task.id, 'decline')}
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      )}
 
-                      <div className="task-actions">
-                        <button
-                          className="task-btn task-btn-accept"
-                          onClick={() => handleTaskAction(task.id, 'accept')}
-                        >
-                          Accept
-                        </button>
-                        <button
-                          className="task-btn task-btn-decline"
-                          onClick={() => handleTaskAction(task.id, 'decline')}
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    )}
+                      {task.status === 'in-progress' && (
+                        <div className="task-actions">
+                          <button
+                            className="task-btn task-btn-complete"
+                            onClick={() => handleTaskAction(task.id, 'complete')}
+                          >
+                            Complete Task
+                          </button>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>
