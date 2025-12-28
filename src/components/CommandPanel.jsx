@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './CommandPanel.css'
+import { DonationPanel } from './DonationPanel'
 
 function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
   const [currentStep, setCurrentStep] = useState(2) // Start at "Assigned" step (0-indexed: 0=Reported, 1=Verified, 2=Assigned, 3=In Progress, 4=Resolved)
@@ -285,6 +286,8 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
             </div>
           </div>
         </div>
+
+        <DonationPanel />
       </div>
     </div>
   )
