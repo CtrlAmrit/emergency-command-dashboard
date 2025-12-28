@@ -1,116 +1,109 @@
-import { useEffect, useRef } from 'react'
-import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import { useEffect, useMemo } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import './MapView.css'
 
+function createVolunteerLocationIcon() {
+  return L.divIcon({
+    className: 'volunteer-location-marker',
+    html: `<div style="background-color: #3388ff; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px rgba(51, 136, 255, 0.6);"></div>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  })
+}
+
+function createIncidentIcon(severity) {
+  const colors = {
+    critical: '#ff3333',
+    high: '#ff8833',
+    medium: '#ffcc33'
+  }
+  const color = colors[severity] || '#ffcc33'
+  
+  return L.divIcon({
+    className: `marker marker-severity-${severity}`,
+    html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff;"></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
+  })
+}
+
+function MapBounds({ volunteerLocation, assignedIncident }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (volunteerLocation && assignedIncident) {
+      const bounds = L.latLngBounds([
+        [volunteerLocation.lat, volunteerLocation.lng],
+        [assignedIncident.lat, assignedIncident.lng]
+      ])
+      map.fitBounds(bounds, { padding: [50, 50], duration: 1 })
+    } else if (volunteerLocation) {
+      map.flyTo([volunteerLocation.lat, volunteerLocation.lng], 13, { duration: 1 })
+    }
+  }, [volunteerLocation, assignedIncident, map])
+
+  return null
+}
+
 function VolunteerMapView({ volunteerLocation, assignedIncident }) {
-  const mapContainer = useRef(null)
-  const map = useRef(null)
-  const volunteerMarkerRef = useRef(null)
-  const incidentMarkerRef = useRef(null)
-
-  // Initialize map
-  useEffect(() => {
-    if (map.current) return
-
-    // Set Mapbox access token globally
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: volunteerLocation ? [volunteerLocation.lng, volunteerLocation.lat] : [-74.0060, 40.7128],
-      zoom: 13,
-      minZoom: 10,
-      maxZoom: 18,
-      attributionControl: false
-    })
-
-    map.current.on('error', (e) => {
-      console.error('Mapbox error:', e)
-    })
-
-    map.current.on('load', () => {
-      map.current.resize()
-    })
-  }, [])
-
-  // Update volunteer marker
-  useEffect(() => {
-    if (!map.current || !volunteerLocation) return
-
-    // Remove existing volunteer marker
-    if (volunteerMarkerRef.current) {
-      volunteerMarkerRef.current.remove()
-    }
-
-    // Create volunteer marker
-    const el = document.createElement('div')
-    el.className = 'volunteer-location-marker'
-    
-    const marker = new mapboxgl.Marker(el)
-      .setLngLat([volunteerLocation.lng, volunteerLocation.lat])
-      .addTo(map.current)
-
-    volunteerMarkerRef.current = marker
-
-    // Center map on volunteer location
-    map.current.flyTo({
-      center: [volunteerLocation.lng, volunteerLocation.lat],
-      zoom: 13,
-      duration: 1000
-    })
-  }, [volunteerLocation])
-
-  // Update incident marker
-  useEffect(() => {
-    if (!map.current) return
-
-    // Remove existing incident marker
-    if (incidentMarkerRef.current) {
-      incidentMarkerRef.current.remove()
-    }
-
+  const volunteerIcon = useMemo(() => createVolunteerLocationIcon(), [])
+  
+  const incidentIcon = useMemo(() => {
     if (assignedIncident) {
-      // Create incident marker
-      const el = document.createElement('div')
-      el.className = `marker marker-severity-${assignedIncident.severity.toLowerCase()}`
-      
-      const popup = new mapboxgl.Popup({ 
-        offset: 25,
-        closeButton: false,
-        className: 'incident-popup'
-      }).setHTML(`
-        <div class="popup-content">
-          <div class="popup-header">
-            <strong>${assignedIncident.type}</strong>
-            <span class="popup-severity severity-${assignedIncident.severity.toLowerCase()}">${assignedIncident.severity}</span>
-          </div>
-          <div class="popup-location">${assignedIncident.location}</div>
-          <div class="popup-summary">${assignedIncident.description}</div>
-        </div>
-      `)
-      
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([assignedIncident.lng, assignedIncident.lat])
-        .setPopup(popup)
-        .addTo(map.current)
-
-      incidentMarkerRef.current = marker
-
-      // Show both markers with bounds
-      if (volunteerLocation) {
-        const bounds = new mapboxgl.LngLatBounds()
-        bounds.extend([volunteerLocation.lng, volunteerLocation.lat])
-        bounds.extend([assignedIncident.lng, assignedIncident.lat])
-        map.current.fitBounds(bounds, { padding: 50, duration: 1000 })
-      }
+      return createIncidentIcon(assignedIncident.severity.toLowerCase())
     }
-  }, [assignedIncident, volunteerLocation])
+    return null
+  }, [assignedIncident])
 
-  return <div ref={mapContainer} className="map-container" />
+  const center = volunteerLocation 
+    ? [volunteerLocation.lat, volunteerLocation.lng] 
+    : [40.7128, -74.0060]
+
+  return (
+    <MapContainer
+      center={center}
+      zoom={13}
+      minZoom={10}
+      maxZoom={18}
+      className="map-container"
+      attributionControl={false}
+    >
+      <TileLayer
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      />
+      <MapBounds volunteerLocation={volunteerLocation} assignedIncident={assignedIncident} />
+      
+      {volunteerLocation && (
+        <Marker
+          position={[volunteerLocation.lat, volunteerLocation.lng]}
+          icon={volunteerIcon}
+        />
+      )}
+      
+      {assignedIncident && (
+        <Marker
+          position={[assignedIncident.lat, assignedIncident.lng]}
+          icon={incidentIcon}
+        >
+          <Popup className="incident-popup">
+            <div className="popup-content">
+              <div className="popup-header">
+                <strong>{assignedIncident.type}</strong>
+                <span className={`popup-severity severity-${assignedIncident.severity.toLowerCase()}`}>
+                  {assignedIncident.severity}
+                </span>
+              </div>
+              <div className="popup-location">{assignedIncident.location}</div>
+              <div className="popup-summary">{assignedIncident.description}</div>
+            </div>
+          </Popup>
+        </Marker>
+      )}
+    </MapContainer>
+  )
 }
 
 export default VolunteerMapView
-
-
