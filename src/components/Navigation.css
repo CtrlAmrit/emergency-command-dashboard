@@ -16,12 +16,12 @@
   top: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  background: rgba(20, 20, 20, 0.5);
+  background: rgba(15, 15, 15, 0.6);
   padding: 4px;
   border-radius: 14px;
   gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  /* Slight optical adjustment for vertical balance */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  /* Optical adjustment: neutral nudge */
   margin-top: -1px;
 }
 
@@ -39,16 +39,16 @@
 
 .selector-slider.admin {
   transform: translateX(0);
-  background: linear-gradient(135deg, rgba(255, 140, 0, 0.12), rgba(255, 69, 0, 0.04));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 140, 0, 0.2);
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(255, 69, 0, 0.03));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 140, 0, 0.15);
 }
 
 .selector-slider.volunteer {
   transform: translateX(calc(100% + 4px));
-  background: linear-gradient(135deg, rgba(0, 200, 255, 0.12), rgba(0, 100, 255, 0.04));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 200, 255, 0.2);
+  background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(0, 100, 255, 0.03));
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 200, 255, 0.15);
 }
 
 .role-option {
@@ -57,7 +57,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 28px;
+  padding: 12px 28px;
   font-size: 14px;
   font-weight: 500;
   color: #888;
@@ -67,11 +67,11 @@
   border-radius: 10px;
   min-width: 190px;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.4;
 }
 
 .role-option:hover {
-  color: #fff;
+  color: #ccc;
 }
 
 .role-option.active {
@@ -80,7 +80,8 @@
 
 .role-icon {
   font-size: 16px;
-  margin-bottom: 1px; /* Optical adjustment for vertical centering */
+  display: flex;
+  align-items: center;
 }
 
 /* Color specific overrides */
