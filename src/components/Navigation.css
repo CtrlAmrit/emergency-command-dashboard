@@ -75,6 +75,26 @@
   color: #fff;
 }
 
+.role-option::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.role-option.active::after {
+  width: 24px;
+  opacity: 1;
+  margin-bottom: 2px;
+}
+
 .role-icon {
   font-size: 16px;
   opacity: 0.7;
@@ -84,13 +104,25 @@
   opacity: 1;
 }
 
-/* Color specific overrides for active state text glow */
+/* Color specific overrides for active state text glow and indicators */
 .role-option.active:nth-child(2) { /* Admin */
-  text-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+  text-shadow: 0 0 12px rgba(255, 140, 0, 0.4);
+  color: #ffaa44;
+}
+
+.role-option.active:nth-child(2)::after {
+  background: #ff8c00;
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
 }
 
 .role-option.active:nth-child(3) { /* Volunteer */
-  text-shadow: 0 0 10px rgba(0, 200, 255, 0.3);
+  text-shadow: 0 0 12px rgba(0, 200, 255, 0.4);
+  color: #44ccff;
+}
+
+.role-option.active:nth-child(3)::after {
+  background: #00c8ff;
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.6);
 }
 
 

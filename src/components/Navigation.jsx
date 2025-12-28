@@ -16,13 +16,13 @@ function Navigation() {
           <span className="role-icon">◈</span>
           Command Center (Admin)
         </Link>
-        <Link 
-          to="/volunteer" 
-          className={`role-option ${!isAdmin ? 'active' : ''}`}
-        >
-          <span className="role-icon">✦</span>
-          Volunteer Mode
-        </Link>
+          <Link 
+            to="/volunteer" 
+            className={`role-option ${!isAdmin ? 'active' : ''}`}
+          >
+            <span className="role-icon">✦</span>
+            Volunteer
+          </Link>
       </div>
     </nav>
   )
