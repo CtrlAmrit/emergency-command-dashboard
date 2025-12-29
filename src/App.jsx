@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import AdminDashboard from './components/AdminDashboard';
 import VolunteerDashboard from './components/VolunteerDashboard';
-import { EntryPage } from './components/EntryPage';
+import EntryPage from './components/EntryPage';
 import { ReportIncident } from './components/ReportIncident';
 import { IncidentProvider } from './IncidentContext';
 
