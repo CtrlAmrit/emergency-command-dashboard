@@ -8,7 +8,7 @@ export default function EntryPage() {
     <div className="entry-page">
       <div className="entry-container">
 <header className="entry-header">
-<h1 className="brand-logo">CONFLUENCE</h1>
+<h1 className="brand-logo">RESPOND</h1>
 <p className="brand-subtitle">Real-time Emergency Support & Public Operations Network Dashboard</p>
 </header>
 
@@ -52,7 +52,7 @@ export default function EntryPage() {
         </div>
 
             <footer className="entry-footer">
-              <p>© 2025 CONFLUENCE. Operational Status: ONLINE</p>
+              <p>© 2025 RESPOND. Operational Status: ONLINE</p>
             </footer>
 
       </div>
