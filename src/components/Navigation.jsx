@@ -13,15 +13,15 @@ function Navigation() {
 
   return (
     <nav className="top-navigation">
-      <div className="role-switcher">
-        <div className={`selector-slider ${isAdmin ? 'admin' : 'volunteer'}`} />
-        <Link 
-          to="/command" 
-          className={`role-option ${isAdmin ? 'active' : ''}`}
-        >
-          <span className="role-icon">◈</span>
-          Command Center (Admin)
-        </Link>
+        <div className="role-switcher">
+          <div className={`selector-slider ${isAdmin ? 'admin' : 'volunteer'}`} />
+          <Link 
+            to="/command" 
+            className={`role-option ${isAdmin ? 'active' : ''}`}
+          >
+            <span className="role-icon">◈</span>
+            Command Center
+          </Link>
           <Link 
             to="/volunteer" 
             className={`role-option ${!isAdmin ? 'active' : ''}`}
@@ -29,7 +29,7 @@ function Navigation() {
             <span className="role-icon">✦</span>
             Volunteer
           </Link>
-      </div>
+        </div>
     </nav>
   )
 }

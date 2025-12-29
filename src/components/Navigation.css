@@ -21,8 +21,7 @@
   border-radius: 14px;
   gap: 4px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  /* Optical adjustment: neutral nudge */
-  margin-top: -1px;
+  align-items: center;
 }
 
 .selector-slider {
@@ -67,7 +66,7 @@
   border-radius: 10px;
   min-width: 190px;
   justify-content: center;
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .role-option:hover {
