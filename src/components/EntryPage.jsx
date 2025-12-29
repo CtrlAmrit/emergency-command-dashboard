@@ -8,8 +8,8 @@ export function EntryPage() {
     <div className="entry-page">
       <div className="entry-container">
         <header className="entry-header">
-          <h1 className="brand-logo">CONFLUENCE</h1>
-          <p className="brand-subtitle">Emergency Coordination & Response Platform</p>
+            <h1 className="brand-logo">RESPOND</h1>
+            <p className="brand-subtitle">Real-time Emergency Support & Public Operations Network Dashboard</p>
         </header>
 
         <div className="role-selection">
@@ -50,9 +50,9 @@ export function EntryPage() {
           </button>
         </div>
 
-        <footer className="entry-footer">
-          <p>© 2025 CONFLUENCE. Operational Status: <span className="status-online">● ONLINE</span></p>
-        </footer>
+          <footer className="entry-footer">
+            <p>© 2025 RESPOND. Operational Status: ONLINE</p>
+          </footer>
       </div>
     </div>
   );
