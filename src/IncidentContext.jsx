@@ -94,7 +94,6 @@ export const IncidentProvider = ({ children }) => {
       status: 'reported',
       assignedVolunteers: [],
       reportedTime: Date.now(),
-      // Default location if not provided (near NYC center for demo)
       lat: incident.lat || 40.7128 + (Math.random() - 0.5) * 0.1,
       lng: incident.lng || -74.0060 + (Math.random() - 0.5) * 0.1,
       severity: incident.severity || 'High'
