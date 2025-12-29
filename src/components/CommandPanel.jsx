@@ -2,60 +2,49 @@ import { useState } from 'react'
 import { useIncidents } from '../IncidentContext'
 import './CommandPanel.css'
 
-function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
-  const { updateIncidentStatus, certifications = [], updateCertificationStatus } = useIncidents()
-  const statusSteps = [
-    'Reported',
-    'Verified',
-    'Assigned',
-    'In Progress',
-    'Resolved'
-  ]
+  function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
+    const { updateIncidentStatus, certifications = [], updateCertificationStatus } = useIncidents()
+    
+    const statusSteps = [
+      { id: 'reported', label: 'Reported' },
+      { id: 'verified', label: 'Verified' },
+      { id: 'assigned', label: 'Assigned' },
+      { id: 'in-progress', label: 'In Progress' },
+      { id: 'resolved', label: 'Resolved' }
+    ]
 
-  const trustScore = {
-    overall: 94,
-    trend: 'up',
-    reliability: 98,
-    response: 92,
-    coordination: 91
-  }
-
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'en-route': return '#3498db';
-      case 'on-scene': return '#f1c40f';
-      case 'assigned': return '#2ecc71';
-      case 'standby': return '#95a5a6';
-      case 'pending': return '#e67e22';
-      default: return '#ffffff';
+    const trustScore = {
+      overall: 94,
+      trend: 'up',
+      reliability: 98,
+      response: 92,
+      coordination: 91
     }
-  }
 
-  // Map incident status to step index
-  const getStepFromStatus = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'reported': return 0;
-      case 'verified': return 1;
-      case 'assigned': return 2;
-      case 'in-progress': return 3;
-      case 'resolved': return 4;
-      default: return 0;
+    const getStatusColor = (status) => {
+      switch (status?.toLowerCase()) {
+        case 'en-route': return '#3498db';
+        case 'on-scene': return '#f1c40f';
+        case 'assigned': return '#2ecc71';
+        case 'standby': return '#95a5a6';
+        case 'pending': return '#e67e22';
+        default: return '#ffffff';
+      }
     }
-  }
 
-    const currentStep = selectedUnit?.type ? getStepFromStatus(selectedUnit.status) : 0;
+    const currentStep = statusSteps.findIndex(step => step.id === selectedUnit?.status?.toLowerCase());
     const isIncidentSelected = !!selectedUnit?.type;
 
     const handlePreviousStep = () => {
-      if (!isIncidentSelected || currentStep === 0) return
-      const prevStatus = statusSteps[currentStep - 1].toLowerCase().replace(' ', '-')
+      if (!isIncidentSelected || currentStep <= 0) return
+      const prevStatus = statusSteps[currentStep - 1].id
       updateIncidentStatus(selectedUnit.id, prevStatus)
       onUnitSelect({ ...selectedUnit, status: prevStatus })
     }
 
     const handleNextStep = () => {
-      if (!isIncidentSelected || currentStep === statusSteps.length - 1) return
-      const nextStatus = statusSteps[currentStep + 1].toLowerCase().replace(' ', '-')
+      if (!isIncidentSelected || currentStep === -1 || currentStep >= statusSteps.length - 1) return
+      const nextStatus = statusSteps[currentStep + 1].id
       updateIncidentStatus(selectedUnit.id, nextStatus)
       onUnitSelect({ ...selectedUnit, status: nextStatus })
     }
@@ -165,11 +154,11 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
                         <div className={`status-timeline-line ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isFuture ? 'future' : ''}`}></div>
                       )}
                     </div>
-                    <div className="status-timeline-content">
-                      <div className={`status-timeline-label ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isFuture ? 'future' : ''}`}>
-                        {step}
+                      <div className="status-timeline-content">
+                        <div className={`status-timeline-label ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isFuture ? 'future' : ''}`}>
+                          {step.label}
+                        </div>
                       </div>
-                    </div>
                   </div>
                 )
               })}
