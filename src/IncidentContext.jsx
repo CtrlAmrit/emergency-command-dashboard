@@ -44,50 +44,62 @@ export const IncidentProvider = ({ children }) => {
     }
   ]);
 
-  const [volunteers, setVolunteers] = useState([
-    { 
-      id: 1, 
-      name: 'Sarah Chen', 
-      role: 'Medical', 
-      status: 'pending', 
-      location: 'Station 1',
-      lat: 40.7200,
-      lng: -74.0100,
-      assignedIncidentId: 1
-    },
-    { 
-      id: 2, 
-      name: 'Michael Torres', 
-      role: 'Fire', 
-      status: 'pending', 
-      location: 'Station 2',
-      lat: 40.7400,
-      lng: -73.9800,
-      assignedIncidentId: 2
-    },
-    { 
-      id: 3, 
-      name: 'James Wilson', 
-      role: 'Traffic Control', 
-      status: 'pending', 
-      location: 'Station 3',
-      lat: 40.7300,
-      lng: -74.0000,
-      assignedIncidentId: 3
-    },
-    { 
-      id: 4, 
-      name: 'Emily Davis', 
-      role: 'Medical', 
-      status: 'standby', 
-      location: 'Station 1',
-      lat: 40.7200,
-      lng: -74.0100,
-      assignedIncidentId: null
-    }
-  ]);
+    const [volunteers, setVolunteers] = useState([
+      { 
+        id: 1, 
+        name: 'Sarah Chen', 
+        role: 'Medical', 
+        status: 'pending', 
+        location: 'Station 1',
+        lat: 40.7200,
+        lng: -74.0100,
+        assignedIncidentId: 1
+      },
+      { 
+        id: 2, 
+        name: 'Michael Torres', 
+        role: 'Fire', 
+        status: 'pending', 
+        location: 'Station 2',
+        lat: 40.7400,
+        lng: -73.9800,
+        assignedIncidentId: 2
+      },
+      { 
+        id: 3, 
+        name: 'James Wilson', 
+        role: 'Traffic Control', 
+        status: 'pending', 
+        location: 'Station 3',
+        lat: 40.7300,
+        lng: -74.0000,
+        assignedIncidentId: 3
+      },
+      { 
+        id: 4, 
+        name: 'Emily Davis', 
+        role: 'Medical', 
+        status: 'standby', 
+        location: 'Station 1',
+        lat: 40.7200,
+        lng: -74.0100,
+        assignedIncidentId: null
+      }
+    ]);
 
-  const addIncident = (incident) => {
+    const [certifications, setCertifications] = useState([]);
+
+    const addCertification = (cert) => {
+      const newCert = {
+        ...cert,
+        id: Date.now(),
+        status: 'PENDING',
+        submittedAt: new Date().toISOString()
+      };
+      setCertifications(prev => [newCert, ...prev]);
+    };
+
+    const addIncident = (incident) => {
     const newIncident = {
       ...incident,
       id: incidents.length + 1,
@@ -147,16 +159,18 @@ export const IncidentProvider = ({ children }) => {
     ));
   };
 
-  return (
-    <IncidentContext.Provider value={{ 
-      incidents, 
-      volunteers, 
-      addIncident, 
-      updateIncidentStatus,
-      handleVolunteerAction,
-      handleVolunteerArrival
-    }}>
-      {children}
-    </IncidentContext.Provider>
-  );
+    return (
+      <IncidentContext.Provider value={{ 
+        incidents, 
+        volunteers, 
+        certifications,
+        addCertification,
+        addIncident, 
+        updateIncidentStatus,
+        handleVolunteerAction,
+        handleVolunteerArrival
+      }}>
+        {children}
+      </IncidentContext.Provider>
+    );
 };

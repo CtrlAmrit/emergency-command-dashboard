@@ -1,71 +1,93 @@
 import { useState } from 'react'
 import VolunteerMapView from './VolunteerMapView'
 import { DonationPanel } from './DonationPanel'
+import { useIncidents } from '../IncidentContext'
 import './VolunteerDashboard.css'
 
 function VolunteerDashboard() {
+  const { certifications, addCertification } = useIncidents();
+  
   // Volunteer's current location
   const volunteerLocation = {
     lat: 40.7200,
     lng: -74.0100
   }
 
-    const [tasks, setTasks] = useState([
-      {
-        id: 1,
-        serviceType: 'Medical',
-        severity: 'Critical',
-        distance: '2.3 km',
-        status: 'in-progress',
-        location: '123 Main St',
-        lat: 40.7128,
-        lng: -74.0060,
-        description: 'Cardiac arrest reported. Immediate medical assistance needed.',
-        potentialTrustGain: 25
-      },
-      {
-        id: 2,
-        serviceType: 'Supplies',
-        severity: 'High',
-        distance: '4.1 km',
-        status: 'available',
-        location: '456 Oak Ave',
-        lat: 40.7580,
-        lng: -73.9855,
-        description: 'Emergency supplies delivery required for evacuation center.',
-        potentialTrustGain: 15
-      },
-      {
-        id: 3,
-        serviceType: 'Rescue',
-        severity: 'Medium',
-        distance: '1.8 km',
-        status: 'completed',
-        location: '789 Pine Rd',
-        lat: 40.7505,
-        lng: -73.9934,
-        description: 'Traffic accident. Assistance with traffic control needed.',
-        potentialTrustGain: 10
-      },
-      {
-        id: 4,
-        serviceType: 'Medical',
-        severity: 'High',
-        distance: '3.5 km',
-        status: 'assigned',
-        location: '321 Elm St',
-        lat: 40.7282,
-        lng: -73.9942,
-        description: 'Medical emergency. First aid support required.',
-        potentialTrustGain: 20
-      }
-    ])
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      serviceType: 'Medical',
+      severity: 'Critical',
+      distance: '2.3 km',
+      status: 'in-progress',
+      location: '123 Main St',
+      lat: 40.7128,
+      lng: -74.0060,
+      description: 'Cardiac arrest reported. Immediate medical assistance needed.',
+      potentialTrustGain: 25
+    },
+    {
+      id: 2,
+      serviceType: 'Supplies',
+      severity: 'High',
+      distance: '4.1 km',
+      status: 'available',
+      location: '456 Oak Ave',
+      lat: 40.7580,
+      lng: -73.9855,
+      description: 'Emergency supplies delivery required for evacuation center.',
+      potentialTrustGain: 15
+    },
+    {
+      id: 3,
+      serviceType: 'Rescue',
+      severity: 'Medium',
+      distance: '1.8 km',
+      status: 'completed',
+      location: '789 Pine Rd',
+      lat: 40.7505,
+      lng: -73.9934,
+      description: 'Traffic accident. Assistance with traffic control needed.',
+      potentialTrustGain: 10
+    },
+    {
+      id: 4,
+      serviceType: 'Medical',
+      severity: 'High',
+      distance: '3.5 km',
+      status: 'assigned',
+      location: '321 Elm St',
+      lat: 40.7282,
+      lng: -73.9942,
+      description: 'Medical emergency. First aid support required.',
+      potentialTrustGain: 20
+    }
+  ])
 
-    const [decliningTasks, setDecliningTasks] = useState([])
-    const [trustScore, setTrustScore] = useState(850)
-    const [trustUpdated, setTrustUpdated] = useState(false)
+  const [decliningTasks, setDecliningTasks] = useState([])
+  const [trustScore, setTrustScore] = useState(850)
+  const [trustUpdated, setTrustUpdated] = useState(false)
 
-    const handleTaskAction = (taskId, action) => {
+  // Certification Form State
+  const [certType, setCertType] = useState('Medical')
+  const [uploadType, setUploadType] = useState('file') // 'file' or 'url'
+  const [certValue, setCertValue] = useState('')
+
+  const handleCertSubmit = (e) => {
+    e.preventDefault();
+    if (!certValue) return;
+    
+    addCertification({
+      type: certType,
+      uploadType,
+      value: certValue
+    });
+    
+    setCertValue('');
+    alert('Certification submitted for review!');
+  }
+
+  const handleTaskAction = (taskId, action) => {
       if (action === 'accept') {
         setTasks(prev => prev.map(task => 
           task.id === taskId 
@@ -268,8 +290,75 @@ function VolunteerDashboard() {
                   </div>
                 ))}
               </div>
-              <DonationPanel />
-            </div>
+                <DonationPanel />
+
+                {/* Certification Section */}
+                <div className="certification-section">
+                  <h2>Verify Certifications</h2>
+                  <form className="certification-form" onSubmit={handleCertSubmit}>
+                    <div className="form-group">
+                      <label>Certification Type</label>
+                      <select 
+                        value={certType} 
+                        onChange={(e) => setCertType(e.target.value)}
+                      >
+                        <option value="Medical">Medical</option>
+                        <option value="Rescue">Rescue</option>
+                        <option value="Supplies/Logistics">Supplies/Logistics</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Upload Method</label>
+                      <div className="upload-options">
+                        <button 
+                          type="button"
+                          className={`upload-type-btn ${uploadType === 'file' ? 'active' : ''}`}
+                          onClick={() => setUploadType('file')}
+                        >
+                          FILE UPLOAD
+                        </button>
+                        <button 
+                          type="button"
+                          className={`upload-type-btn ${uploadType === 'url' ? 'active' : ''}`}
+                          onClick={() => setUploadType('url')}
+                        >
+                          VERIFICATION URL
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>{uploadType === 'file' ? 'File Name' : 'URL Link'}</label>
+                      <input 
+                        type="text" 
+                        placeholder={uploadType === 'file' ? 'e.g. medical_license.pdf' : 'e.g. https://registry.org/verify/123'}
+                        value={certValue}
+                        onChange={(e) => setCertValue(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <button type="submit" className="submit-cert-btn">
+                      SUBMIT FOR VERIFICATION
+                    </button>
+                  </form>
+
+                  <div className="certifications-list">
+                    {certifications.map(cert => (
+                      <div key={cert.id} className="cert-card">
+                        <div className="cert-info">
+                          <span className="cert-type">{cert.type} Certification</span>
+                          <span className="cert-date">Submitted: {new Date(cert.submittedAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className={`cert-status ${cert.status.toLowerCase()}`}>
+                          {cert.status}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
       </div>
     </div>
