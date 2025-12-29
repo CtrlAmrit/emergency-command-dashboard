@@ -3,7 +3,13 @@ import './Navigation.css'
 
 function Navigation() {
   const location = useLocation()
-  const isAdmin = location.pathname === '/admin' || location.pathname === '/'
+  
+  // Hide navigation on EntryPage and ReportIncident page
+  if (location.pathname === '/' || location.pathname === '/report') {
+    return null
+  }
+
+  const isAdmin = location.pathname === '/admin'
 
   return (
     <nav className="top-navigation">
