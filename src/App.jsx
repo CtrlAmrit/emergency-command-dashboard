@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import AdminDashboard from './components/AdminDashboard';
 import VolunteerDashboard from './components/VolunteerDashboard';
@@ -9,7 +9,7 @@ import { IncidentProvider } from './IncidentContext';
 export function App() {
   return (
     <IncidentProvider>
-      <HashRouter>
+      <Router>
         <Navigation />
         <Routes>
           <Route path="/" element={<EntryPage />} />
@@ -18,7 +18,7 @@ export function App() {
           <Route path="/volunteer" element={<VolunteerDashboard />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </HashRouter>
+      </Router>
     </IncidentProvider>
   );
 }
