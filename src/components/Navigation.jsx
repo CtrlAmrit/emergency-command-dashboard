@@ -9,14 +9,14 @@ function Navigation() {
     return null
   }
 
-  const isAdmin = location.pathname === '/admin'
+  const isAdmin = location.pathname === '/command'
 
   return (
     <nav className="top-navigation">
       <div className="role-switcher">
         <div className={`selector-slider ${isAdmin ? 'admin' : 'volunteer'}`} />
         <Link 
-          to="/admin" 
+          to="/command" 
           className={`role-option ${isAdmin ? 'active' : ''}`}
         >
           <span className="role-icon">◈</span>

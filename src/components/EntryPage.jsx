@@ -39,7 +39,7 @@ export function EntryPage() {
 
           <button 
             className="role-card command"
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate('/command')}
           >
             <div className="role-icon">◈</div>
             <div className="role-content">

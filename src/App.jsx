@@ -9,13 +9,13 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <Routes>
-        <Route path="/" element={<EntryPage />} />
-        <Route path="/report" element={<ReportIncident />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/volunteer" element={<VolunteerDashboard />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<EntryPage />} />
+          <Route path="/report" element={<ReportIncident />} />
+          <Route path="/command" element={<AdminDashboard />} />
+          <Route path="/volunteer" element={<VolunteerDashboard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
     </BrowserRouter>
   )
 }
