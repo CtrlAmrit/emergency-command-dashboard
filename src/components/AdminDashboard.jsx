@@ -13,8 +13,8 @@ function AdminDashboard() {
     handleVolunteerArrival 
   } = useIncidents()
 
-  return (
-    <div className="dashboard" style={{ marginTop: '45px', height: 'calc(100vh - 45px)' }}>
+    return (
+      <div className="dashboard" style={{ marginTop: '32px', height: 'calc(100vh - 32px)' }}>
       <div className="dashboard-left">
         <MapView 
           selectedUnit={selectedUnit} 

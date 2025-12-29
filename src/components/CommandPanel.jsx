@@ -43,21 +43,22 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
     }
   }
 
-  const currentStep = selectedUnit?.type ? getStepFromStatus(selectedUnit.status) : 0;
+    const currentStep = selectedUnit?.type ? getStepFromStatus(selectedUnit.status) : 0;
+    const isIncidentSelected = !!selectedUnit?.type;
 
-  const handlePreviousStep = () => {
-    if (!selectedUnit || currentStep === 0) return
-    const prevStatus = statusSteps[currentStep - 1].toLowerCase().replace(' ', '-')
-    updateIncidentStatus(selectedUnit.id, prevStatus)
-    onUnitSelect({ ...selectedUnit, status: prevStatus })
-  }
+    const handlePreviousStep = () => {
+      if (!isIncidentSelected || currentStep === 0) return
+      const prevStatus = statusSteps[currentStep - 1].toLowerCase().replace(' ', '-')
+      updateIncidentStatus(selectedUnit.id, prevStatus)
+      onUnitSelect({ ...selectedUnit, status: prevStatus })
+    }
 
-  const handleNextStep = () => {
-    if (!selectedUnit || currentStep === statusSteps.length - 1) return
-    const nextStatus = statusSteps[currentStep + 1].toLowerCase().replace(' ', '-')
-    updateIncidentStatus(selectedUnit.id, nextStatus)
-    onUnitSelect({ ...selectedUnit, status: nextStatus })
-  }
+    const handleNextStep = () => {
+      if (!isIncidentSelected || currentStep === statusSteps.length - 1) return
+      const nextStatus = statusSteps[currentStep + 1].toLowerCase().replace(' ', '-')
+      updateIncidentStatus(selectedUnit.id, nextStatus)
+      onUnitSelect({ ...selectedUnit, status: nextStatus })
+    }
 
     const activeIncidentsCount = incidents.filter(inc => inc.status !== 'resolved').length;
     const criticalIncidentsCount = incidents.filter(inc => inc.severity === 'Critical').length;
@@ -173,22 +174,22 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
                 )
               })}
             </div>
-            <div className="status-timeline-actions">
-              <button 
-                className="status-action-btn status-action-btn-secondary"
-                onClick={handlePreviousStep}
-                disabled={currentStep === 0}
-              >
-                Previous
-              </button>
-              <button 
-                className="status-action-btn status-action-btn-primary"
-                onClick={handleNextStep}
-                disabled={currentStep === statusSteps.length - 1}
-              >
-                Next Step
-              </button>
-            </div>
+              <div className="status-timeline-actions">
+                <button 
+                  className="status-action-btn status-action-btn-secondary"
+                  onClick={handlePreviousStep}
+                  disabled={!isIncidentSelected || currentStep === 0}
+                >
+                  Previous
+                </button>
+                <button 
+                  className="status-action-btn status-action-btn-primary"
+                  onClick={handleNextStep}
+                  disabled={!isIncidentSelected || currentStep === statusSteps.length - 1}
+                >
+                  Next Step
+                </button>
+              </div>
           </div>
         </div>
 

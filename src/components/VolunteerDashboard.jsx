@@ -175,7 +175,7 @@ function VolunteerDashboard() {
 
 
   return (
-    <div className="volunteer-dashboard" style={{ marginTop: '45px', height: 'calc(100vh - 45px)' }}>
+    <div className="volunteer-dashboard" style={{ marginTop: '32px', height: 'calc(100vh - 32px)' }}>
       <div className="volunteer-header">
         <div className="header-left">
           <h1>Volunteer Task Center</h1>
