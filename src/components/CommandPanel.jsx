@@ -2,8 +2,6 @@ import { useState } from 'react'
 import './CommandPanel.css'
 
 function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
-  const [currentStep, setCurrentStep] = useState(2) // Start at "Assigned" step (0-indexed: 0=Reported, 1=Verified, 2=Assigned, 3=In Progress, 4=Resolved)
-
   const statusSteps = [
     'Reported',
     'Verified',
@@ -12,92 +10,101 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
     'Resolved'
   ]
 
-  const handleNextStep = () => {
-    if (currentStep < statusSteps.length - 1) {
-      setCurrentStep(currentStep + 1)
+  // Map incident status to step index
+  const getStepFromStatus = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'reported': return 0;
+      case 'verified': return 1;
+      case 'assigned': return 2;
+      case 'in-progress': return 3;
+      case 'resolved': return 4;
+      default: return 0;
     }
   }
 
-  const handlePreviousStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1)
-    }
-  }
-  // Dummy data
-  const incidentOverview = {
-    active: 5,
-    critical: 2,
-    high: 2,
-    medium: 1,
-    responseTime: '4.2 min',
-    avgResolution: '18.5 min'
-  }
+  const currentStep = selectedUnit?.type ? getStepFromStatus(selectedUnit.status) : 0;
 
+    const activeIncidentsCount = incidents.filter(inc => inc.status !== 'resolved').length;
+    const criticalIncidentsCount = incidents.filter(inc => inc.severity === 'Critical').length;
+    const highIncidentsCount = incidents.filter(inc => inc.severity === 'High').length;
+    const mediumIncidentsCount = incidents.filter(inc => inc.severity === 'Medium').length;
 
-  const trustScore = {
-    overall: 87,
-    reliability: 92,
-    response: 85,
-    coordination: 88,
-    trend: 'up'
-  }
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'assigned': return '#ffaa00'
-      case 'en-route': return '#3388ff'
-      case 'on-scene': return '#00ff00'
-      case 'standby': return '#888888'
-      default: return '#ffffff'
-    }
-  }
-
-  return (
-    <div className="command-panel">
-      <div className="panel-header">
-        <h1>COMMAND CENTER</h1>
-        <div className="status-indicator">
-          <span className="status-dot active"></span>
-          <span>OPERATIONAL</span>
-        </div>
-      </div>
-
-      <div className="cards-container">
-        {/* Incident Overview Card */}
-        <div className="command-card">
-          <div className="card-header">
-            <h2 className="card-title">Incident Overview</h2>
-            <div className="card-divider"></div>
+    return (
+      <div className="command-panel">
+        <div className="panel-header">
+          <h1>COMMAND CENTER</h1>
+          <div className="status-indicator">
+            <span className="status-dot active"></span>
+            <span>OPERATIONAL</span>
           </div>
-          <div className="card-content">
-            <div className="overview-grid">
-              <div className="overview-item">
-                <div className="overview-label">Active Incidents</div>
-                <div className="overview-value">{incidentOverview.active}</div>
-              </div>
-              <div className="overview-item">
-                <div className="overview-label">Critical</div>
-                <div className="overview-value critical">{incidentOverview.critical}</div>
-              </div>
-              <div className="overview-item">
-                <div className="overview-label">High Priority</div>
-                <div className="overview-value high">{incidentOverview.high}</div>
-              </div>
-              <div className="overview-item">
-                <div className="overview-label">Medium Priority</div>
-                <div className="overview-value medium">{incidentOverview.medium}</div>
-              </div>
-              <div className="overview-item">
-                <div className="overview-label">Avg Response Time</div>
-                <div className="overview-value">{incidentOverview.responseTime}</div>
-              </div>
-              <div className="overview-item">
-                <div className="overview-label">Avg Resolution</div>
-                <div className="overview-value">{incidentOverview.avgResolution}</div>
+        </div>
+
+        <div className="cards-container">
+          {/* Active Incidents List Card */}
+          <div className="command-card">
+            <div className="card-header">
+              <h2 className="card-title">Recent Incidents</h2>
+              <div className="card-divider"></div>
+            </div>
+            <div className="card-content">
+              <div className="incident-list-container">
+                {incidents.slice(0, 5).map(incident => (
+                  <div 
+                    key={incident.id} 
+                    className={`incident-list-item ${selectedUnit?.id === incident.id && selectedUnit?.type ? 'selected' : ''}`}
+                    onClick={() => onUnitSelect(incident)}
+                  >
+                    <div className="incident-item-left">
+                      <div className={`severity-tag severity-${incident.severity.toLowerCase()}`}>
+                        {incident.severity}
+                      </div>
+                      <div className="incident-item-title">{incident.type}</div>
+                    </div>
+                    <div className="incident-item-right">
+                      <div className="incident-item-status">{incident.status.toUpperCase()}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
+
+          {/* Incident Overview Card */}
+          <div className="command-card">
+            <div className="card-header">
+              <h2 className="card-title">System Metrics</h2>
+              <div className="card-divider"></div>
+            </div>
+            <div className="card-content">
+              <div className="overview-grid">
+                <div className="overview-item">
+                  <div className="overview-label">Active Incidents</div>
+                  <div className="overview-value">{activeIncidentsCount}</div>
+                </div>
+                <div className="overview-item">
+                  <div className="overview-label">Critical</div>
+                  <div className="overview-value critical">{criticalIncidentsCount}</div>
+                </div>
+                <div className="overview-item">
+                  <div className="overview-label">High Priority</div>
+                  <div className="overview-value high">{highIncidentsCount}</div>
+                </div>
+                <div className="overview-item">
+                  <div className="overview-label">Medium Priority</div>
+                  <div className="overview-value medium">{mediumIncidentsCount}</div>
+                </div>
+                <div className="overview-item">
+                  <div className="overview-label">Avg Response Time</div>
+                  <div className="overview-value">4.2 min</div>
+                </div>
+                <div className="overview-item">
+                  <div className="overview-label">Avg Resolution</div>
+                  <div className="overview-value">18.5 min</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
         {/* Status Timeline Card */}
         <div className="command-card">
