@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import VolunteerDashboard from './components/VolunteerDashboard.jsx';
@@ -7,7 +7,7 @@ import { ReportIncident } from './components/ReportIncident.jsx';
 
 export function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navigation />
       <Routes>
         <Route path="/" element={<EntryPage />} />
@@ -16,7 +16,7 @@ export function App() {
         <Route path="/volunteer" element={<VolunteerDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
