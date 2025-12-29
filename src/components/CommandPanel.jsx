@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useIncidents } from '../IncidentContext'
 import './CommandPanel.css'
 
 function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
+  const { updateIncidentStatus } = useIncidents()
   const statusSteps = [
     'Reported',
     'Verified',
@@ -9,6 +11,25 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
     'In Progress',
     'Resolved'
   ]
+
+  const trustScore = {
+    overall: 94,
+    trend: 'up',
+    reliability: 98,
+    response: 92,
+    coordination: 91
+  }
+
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'en-route': return '#3498db';
+      case 'on-scene': return '#f1c40f';
+      case 'assigned': return '#2ecc71';
+      case 'standby': return '#95a5a6';
+      case 'pending': return '#e67e22';
+      default: return '#ffffff';
+    }
+  }
 
   // Map incident status to step index
   const getStepFromStatus = (status) => {
@@ -23,6 +44,20 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
   }
 
   const currentStep = selectedUnit?.type ? getStepFromStatus(selectedUnit.status) : 0;
+
+  const handlePreviousStep = () => {
+    if (!selectedUnit || currentStep === 0) return
+    const prevStatus = statusSteps[currentStep - 1].toLowerCase().replace(' ', '-')
+    updateIncidentStatus(selectedUnit.id, prevStatus)
+    onUnitSelect({ ...selectedUnit, status: prevStatus })
+  }
+
+  const handleNextStep = () => {
+    if (!selectedUnit || currentStep === statusSteps.length - 1) return
+    const nextStatus = statusSteps[currentStep + 1].toLowerCase().replace(' ', '-')
+    updateIncidentStatus(selectedUnit.id, nextStatus)
+    onUnitSelect({ ...selectedUnit, status: nextStatus })
+  }
 
     const activeIncidentsCount = incidents.filter(inc => inc.status !== 'resolved').length;
     const criticalIncidentsCount = incidents.filter(inc => inc.severity === 'Critical').length;
@@ -299,4 +334,3 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
 
 
 export default CommandPanel
-
