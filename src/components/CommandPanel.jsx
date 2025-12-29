@@ -3,7 +3,7 @@ import { useIncidents } from '../IncidentContext'
 import './CommandPanel.css'
 
 function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents = [], onVolunteerAction = () => {} }) {
-  const { updateIncidentStatus } = useIncidents()
+  const { updateIncidentStatus, certifications = [], updateCertificationStatus } = useIncidents()
   const statusSteps = [
     'Reported',
     'Verified',
@@ -276,10 +276,48 @@ function CommandPanel({ selectedUnit, onUnitSelect, volunteers = [], incidents =
                 )}
               </div>
             </div>
+            </div>
           </div>
-        </div>
+  
+          {/* Certification Approvals Card */}
+          <div className="command-card">
+            <div className="card-header">
+              <h2 className="card-title">Certification Approvals</h2>
+              <div className="card-divider"></div>
+            </div>
+            <div className="card-content">
+              <div className="volunteer-list">
+                {certifications.filter(c => c.status === 'PENDING').length > 0 ? (
+                  certifications
+                    .filter(c => c.status === 'PENDING')
+                    .map(cert => (
+                      <div key={cert.id} className="volunteer-item volunteer-item-pending">
+                        <div className="volunteer-main">
+                          <div className="volunteer-name">{cert.volunteerName || 'Volunteer'}</div>
+                          <div className="volunteer-role">{cert.type} Certification</div>
+                          <div className="volunteer-incident">
+                            Method: {cert.method} {cert.method === 'url' ? `- ${cert.url}` : `- ${cert.fileName}`}
+                          </div>
+                        </div>
+                        <div className="volunteer-actions">
+                          <button
+                            className="volunteer-action-btn volunteer-action-accept"
+                            onClick={() => updateCertificationStatus(cert.id, 'APPROVED')}
+                          >
+                            Approve
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="volunteer-empty">No pending certifications</div>
+                )}
+              </div>
+            </div>
+          </div>
+  
+          {/* Trust Score Card */}
 
-        {/* Trust Score Card */}
           <div className="command-card">
             <div className="card-header">
               <h2 className="card-title">Trust Score</h2>

@@ -99,7 +99,14 @@ export const IncidentProvider = ({ children }) => {
       setCertifications(prev => [newCert, ...prev]);
     };
 
-    const addIncident = (incident) => {
+      const updateCertificationStatus = (certId, status) => {
+        setCertifications(prev => prev.map(cert => 
+          cert.id === certId ? { ...cert, status } : cert
+        ));
+      };
+  
+      const addIncident = (incident) => {
+
     const newIncident = {
       ...incident,
       id: incidents.length + 1,
@@ -165,6 +172,7 @@ export const IncidentProvider = ({ children }) => {
         volunteers, 
         certifications,
         addCertification,
+        updateCertificationStatus,
         addIncident, 
         updateIncidentStatus,
         handleVolunteerAction,
